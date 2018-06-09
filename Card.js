@@ -30,7 +30,7 @@ var cardStack =function() {
         var topNum = this.Cards.length;
         var indexToReturn = Math.floor(Math.random() * topNum);
         return this.Cards.splice(indexToReturn,1);
-    }
+    };
 };
 
 exports.Card=Card;

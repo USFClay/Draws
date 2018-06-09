@@ -3,20 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+const Card = require("./Card");
 
-var Card = require("./Card");
 
+//deal some hands 
+var hand = new Card.cardStack();
 var deck = new Card.cardStack();
+var board = new Card.cardStack();
 deck.fillDeck();
 
-console.log(deck.Cards.length);
 
-var hand = new Card.cardStack();
 hand.Cards.push(deck.dealRandom());
 hand.Cards.push(deck.dealRandom());
-console.log(hand.Cards.length);
+board.Cards.push(deck.dealRandom());
+board.Cards.push(deck.dealRandom());
+board.Cards.push(deck.dealRandom());
+board.Cards.push(deck.dealRandom());
+board.Cards.push(deck.dealRandom());
 
-console.log(deck.Cards.length);
 
-console.log(deck.Cards);
-console.log(hand.Cards);
+
+
+
+
