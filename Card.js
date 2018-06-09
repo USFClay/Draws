@@ -33,5 +33,5 @@ var cardStack =function() {
     }
 };
 
-exports.Cards=Card;
+exports.Card=Card;
 exports.cardStack=cardStack;
