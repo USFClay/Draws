@@ -1,6 +1,6 @@
 //constructor for Card object
 //input the suite h,d,s,c and rank 2-14
-var Card =function(suit, rank) {
+var Card = function (suit, rank) {
     this.Suit = suit;
     this.Rank = rank;
     this.Display = rank + suit;
@@ -8,7 +8,7 @@ var Card =function(suit, rank) {
 
 //cardStack can function as a hand, deck, or community cards
 //It contains a card array and functions for moving cards in and out
-var cardStack =function() {
+var cardStack = function () {
 //array that contains all Card objects in the stack
     this.Cards = [];
     //method to fill Cards array with standard 52 count card deck
@@ -29,9 +29,20 @@ var cardStack =function() {
     this.dealRandom = function () {
         var topNum = this.Cards.length;
         var indexToReturn = Math.floor(Math.random() * topNum);
-        return this.Cards.splice(indexToReturn,1);
+        return this.Cards.splice(indexToReturn, 1);
     };
 };
 
-exports.Card=Card;
-exports.cardStack=cardStack;
+var game = function () {
+    var draw1;
+    var draw2;
+    var flop1;
+    var flop2;
+    var flop3;
+    var turn;
+    var river;
+};
+
+exports.Card = Card;
+exports.cardStack = cardStack;
+exports.game = game;

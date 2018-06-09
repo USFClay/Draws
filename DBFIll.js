@@ -21,14 +21,25 @@ MongoClient.connect(url, function (err, client) {
     console.log("Connected successfully to server");
 
     const db = client.db(dbName);
-    insertDocuments(db, "testDraw", [{a: 1}], function () {
-        client.close();
-    });
+    //insert loop here to generate game deals and insert
+    //deal some hands 
+    var deck = new Card.cardStack();
+    deck.fillDeck();
+    var currentGame = new Card.game();
+    currentGame.draw1 = deck.dealRandom();
+    currentGame.draw2 = deck.dealRandom();
+    currentGame.flop1 = deck.dealRandom();
+    currentGame.flop2 = deck.dealRandom();
+    currentGame.flop3 = deck.dealRandom();
+    currentGame.turn = deck.dealRandom();
+    currentGame.river = deck.dealRandom();
 
+    insertDocuments(db, "testDraw", currentGame);
+    client.close();
 });
 
 //define insert function for inserting into specified collection
-const insertDocuments = function (db, coll, doc, callback) {
+const insertDocuments = function (db, coll, doc) {
     // Get the documents collection
     const collection = db.collection(coll);
     // Insert some documents
@@ -36,27 +47,13 @@ const insertDocuments = function (db, coll, doc, callback) {
         assert.equal(err, null);
         assert.equal(1, result.result.n);
         assert.equal(1, result.ops.length);
-        callback(result);
+
     });
 };
 
 
 
 
-//deal some hands 
-var hand = new Card.cardStack();
-var deck = new Card.cardStack();
-var board = new Card.cardStack();
-deck.fillDeck();
-
-
-hand.Cards.push(deck.dealRandom());
-hand.Cards.push(deck.dealRandom());
-board.Cards.push(deck.dealRandom());
-board.Cards.push(deck.dealRandom());
-board.Cards.push(deck.dealRandom());
-board.Cards.push(deck.dealRandom());
-board.Cards.push(deck.dealRandom());
 
 
 
