@@ -1,0 +1,23 @@
+{
+  "name": "draws",
+  "version": "1.0.0",
+  "description": "Build Poker DB for odd calc",
+  "main": "DBFill.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://usfclay@github.com/USFClay/Draws.git"
+  },
+  "author": "Clay Bigelow",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/USFClay/Draws/issues"
+  },
+  "homepage": "https://github.com/USFClay/Draws#readme",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "mongodb": "^3.0.10"
+  }
+}
