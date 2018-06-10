@@ -34,13 +34,10 @@ var cardStack = function () {
 };
 
 var game = function () {
-    var draw1;
-    var draw2;
-    var flop1;
-    var flop2;
-    var flop3;
-    var turn;
-    var river;
+    this.hand = new cardStack();
+    this.flop = new cardStack();
+    this.turn = new cardStack();
+    this.river = new cardStack();
 };
 
 exports.Card = Card;

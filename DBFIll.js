@@ -13,29 +13,36 @@ const assert = require('assert');
 const url = 'mongodb://localhost:27017';
 
 // Database Name
-const dbName = 'Draws';
+const dbName = 'Draws'; //db name
 
 // Use connect method to connect to the server
 MongoClient.connect(url, function (err, client) {
     assert.equal(null, err);
     console.log("Connected successfully to server");
 
-    const db = client.db(dbName);
-    //insert loop here to generate game deals and insert
-    //deal some hands 
-    var deck = new Card.cardStack();
-    deck.fillDeck();
-    var currentGame = new Card.game();
-    currentGame.draw1 = deck.dealRandom();
-    currentGame.draw2 = deck.dealRandom();
-    currentGame.flop1 = deck.dealRandom();
-    currentGame.flop2 = deck.dealRandom();
-    currentGame.flop3 = deck.dealRandom();
-    currentGame.turn = deck.dealRandom();
-    currentGame.river = deck.dealRandom();
+    const db = client.db(dbName); //db name
+    const col = "testDraw"; //collection name
 
-    insertDocuments(db, "testDraw", currentGame);
+    //deal some hands 
+    for (var i = 0; i < 5000; i++) {
+        var deck = new Card.cardStack();
+        deck.fillDeck();
+        var currentGame = new Card.game();
+        currentGame.hand.Cards.push(deck.dealRandom());
+        currentGame.hand.Cards.push(deck.dealRandom());
+        currentGame.flop.Cards.push(deck.dealRandom());
+        currentGame.flop.Cards.push(deck.dealRandom());
+        currentGame.flop.Cards.push(deck.dealRandom());
+        currentGame.turn.Cards.push(deck.dealRandom());
+        currentGame.river.Cards.push(deck.dealRandom());
+
+        //push object into db
+        insertDocuments(db, col, currentGame);
+    }
+    //close db
     client.close();
+    console.log("Connected successfully ended");
+    
 });
 
 //define insert function for inserting into specified collection
@@ -44,9 +51,9 @@ const insertDocuments = function (db, coll, doc) {
     const collection = db.collection(coll);
     // Insert some documents
     collection.insert(doc, function (err, result) {
-        assert.equal(err, null);
-        assert.equal(1, result.result.n);
-        assert.equal(1, result.ops.length);
+        assert.deepEqual(err, null);
+        assert.deepEqual(1, result.result.n);
+        assert.deepEqual(1, result.ops.length);
 
     });
 };
