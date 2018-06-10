@@ -22,8 +22,8 @@ MongoClient.connect(url, function (err, client) {
 
     const db = client.db(dbName); //db name
     const col = "testDraw"; //collection name
-
-    //deal some hands 
+    //create bulk operation to improve speed
+    var bulk = db.testDraw.initializeUnorderedBulkOp();
     for (var i = 0; i < 10000; i++) {
         var deck = new Card.cardStack();
         deck.fillDeck();
@@ -37,12 +37,14 @@ MongoClient.connect(url, function (err, client) {
         currentGame.river.Cards.push(deck.dealRandom());
 
         //push object into db
-        insertDocuments(db, col, currentGame);
+        bulk.insert(currentGame);
     }
+    
+    bulk.execute();
     //close db
     client.close();
     console.log("Connected successfully ended");
-    
+
 });
 
 //define insert function for inserting into specified collection
