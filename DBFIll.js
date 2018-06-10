@@ -24,7 +24,7 @@ MongoClient.connect(url, function (err, client) {
     const col = "testDraw"; //collection name
 
     //deal some hands 
-    for (var i = 0; i < 5000; i++) {
+    for (var i = 0; i < 10000; i++) {
         var deck = new Card.cardStack();
         deck.fillDeck();
         var currentGame = new Card.game();
