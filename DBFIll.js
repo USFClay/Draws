@@ -23,9 +23,13 @@ MongoClient.connect(url, function (err, client) {
     //create bulk operation to improve speed
     //dumpCounter is variable to count the number of bulk dumps into mongo
     var dumpCounter = 0;
-    
+
     //dumpCycles is variable that holds the number of bulk dumps into mongo desired
-    var dumpCycles = 5;
+    var dumpCycles = 25;
+
+    //gameCount sets how many games are dealt before each bulkinsert is executed
+    //total records executed will be gameCount * dumpCycles
+    var gameCount = 5000;
 
     //loop array is function that calls itself until the number of dumps
     //into mongo db cotnrolled via x is done. Pass in callback function that recalls
@@ -38,7 +42,7 @@ MongoClient.connect(url, function (err, client) {
             // stop after set number of dumps
             if (dumpCounter < dumpCycles) {
                 loopArray(arr);
-                console.log('increment');
+
             }
         });
     };
