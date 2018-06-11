@@ -76,8 +76,7 @@ MongoClient.connect(url, function (err, client) {
         bulk.execute(function (error, result) {
             //log actual inserts
             actualInsert = 2;
-            console.log('this is happening');
-            //actualInsert+parseInt(result.nInserted)
+            console.log(result.nInserted);
         });
         // do callback when bulk is done
         callback();
