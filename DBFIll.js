@@ -8,11 +8,8 @@
 const Card = require("./Card");
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-
 // Connection URL for database
 const url = 'mongodb://localhost:27017';
-
-
 
 // Use connect method to connect to the server
 MongoClient.connect(url, function (err, client) {
@@ -24,6 +21,8 @@ MongoClient.connect(url, function (err, client) {
     const db = client.db(dbName); //db name
     const col = db.collection(collection); //collection name
     //create bulk operation to improve speed
+    //function 
+    
     var bulk = col.initializeUnorderedBulkOp();
     for (var i = 0; i < 5000; i++) {
         var deck = new Card.cardStack();
@@ -48,9 +47,6 @@ MongoClient.connect(url, function (err, client) {
         client.close();//close db
         console.log("Connected successfully ended");
     });
-
-
-
 
 });
 
