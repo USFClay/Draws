@@ -12,20 +12,20 @@ const assert = require('assert');
 // Connection URL for database
 const url = 'mongodb://localhost:27017';
 
-// Database Name
-const dbName = 'Draws'; //db name
-const collection = 'testDraw'; //collection name
+
 
 // Use connect method to connect to the server
 MongoClient.connect(url, function (err, client) {
     assert.equal(null, err);
     console.log("Connected successfully to server");
-
+    // Database Name
+    const dbName = 'Draws'; //db name
+    const collection = 'testDraw'; //collection name
     const db = client.db(dbName); //db name
     const col = db.collection(collection); //collection name
     //create bulk operation to improve speed
     var bulk = col.initializeUnorderedBulkOp();
-    for (var i = 0; i < 50000; i++) {
+    for (var i = 0; i < 5000; i++) {
         var deck = new Card.cardStack();
         deck.fillDeck();
         var currentGame = new Card.game();
@@ -38,20 +38,19 @@ MongoClient.connect(url, function (err, client) {
         currentGame.river.Cards.push(deck.dealRandom());
 
         //push object into db
-        console.log(bulk.length);
+
         bulk.insert(currentGame);
     }
-    
-    bulk.execute(function(error,result){
-        console.log(bulk.length);
-        console.log(error);
-        console.log(result);
+    console.log('records to be inserted: ' + i);
+    bulk.execute(function (error, result) {
+
+        console.log('number of records inserted: ' + result.nInserted);
         client.close();//close db
         console.log("Connected successfully ended");
     });
-    
-    
-    
+
+
+
 
 });
 
