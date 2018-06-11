@@ -21,33 +21,64 @@ MongoClient.connect(url, function (err, client) {
     const db = client.db(dbName); //db name
     const col = db.collection(collection); //collection name
     //create bulk operation to improve speed
-    //function 
+    //dumpCounter is variable to count the number of bulk dumps into mongo
+    var dumpCounter = 0;
     
-    var bulk = col.initializeUnorderedBulkOp();
-    for (var i = 0; i < 5000; i++) {
-        var deck = new Card.cardStack();
-        deck.fillDeck();
-        var currentGame = new Card.game();
-        currentGame.hand.Cards.push(deck.dealRandom());
-        currentGame.hand.Cards.push(deck.dealRandom());
-        currentGame.flop.Cards.push(deck.dealRandom());
-        currentGame.flop.Cards.push(deck.dealRandom());
-        currentGame.flop.Cards.push(deck.dealRandom());
-        currentGame.turn.Cards.push(deck.dealRandom());
-        currentGame.river.Cards.push(deck.dealRandom());
+    //dumpCycles is variable that holds the number of bulk dumps into mongo desired
+    var dumpCycles = 5;
 
-        //push object into db
+    //loop array is function that calls itself until the number of dumps
+    //into mongo db cotnrolled via x is done. Pass in callback function that recalls
+    //the loop only when the batch opertion is done from the previous cycle
+    var loopArray = function (arr) {
+        bulkData(function () {
+            // set x to next item
+            dumpCounter++;
 
-        bulk.insert(currentGame);
+            // stop after set number of dumps
+            if (dumpCounter < dumpCycles) {
+                loopArray(arr);
+                console.log('increment');
+            }
+        });
+    };
+
+    //this function creates the data and does the bulk instert into mongo.
+    //it has callback that is exexuted once the cycle is done
+    function bulkData(callback) {
+        var bulk = col.initializeUnorderedBulkOp();
+        //create the data
+        for (var i = 0; i < 5000; i++) {
+            var deck = new Card.cardStack();
+            deck.fillDeck();
+            var currentGame = new Card.game();
+            currentGame.hand.Cards.push(deck.dealRandom());
+            currentGame.hand.Cards.push(deck.dealRandom());
+            currentGame.flop.Cards.push(deck.dealRandom());
+            currentGame.flop.Cards.push(deck.dealRandom());
+            currentGame.flop.Cards.push(deck.dealRandom());
+            currentGame.turn.Cards.push(deck.dealRandom());
+            currentGame.river.Cards.push(deck.dealRandom());
+
+            //push object into bulk for upload
+            bulk.insert(currentGame);
+        }
+        //count the number of uploads and complete the bulk insert
+        console.log('records to be inserted: ' + i);
+        bulk.execute(function (error, result) {
+            //log actual inserts
+            console.log('number of records inserted: ' + result.nInserted);
+
+        });
+        // do callback when bulk is done
+        callback();
     }
-    console.log('records to be inserted: ' + i);
-    bulk.execute(function (error, result) {
 
-        console.log('number of records inserted: ' + result.nInserted);
-        client.close();//close db
-        console.log("Connected successfully ended");
-    });
+    //start the loop wait for bulkinsert before next cycle
+    loopArray(dumpCounter);
 
+    client.close();//close db
+    console.log("Connected successfully ended");
 });
 
 //define insert function for inserting into specified collection
