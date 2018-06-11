@@ -92,19 +92,6 @@ MongoClient.connect(url, function (err, client) {
     console.log('acutual inserts: ' + actualInsert);
 });
 
-//define insert function for inserting into specified collection
-const insertDocuments = function (db, coll, doc) {
-    // Get the documents collection
-    const collection = db.collection(coll);
-    // Insert some documents
-    collection.insert(doc, function (err, result) {
-        assert.deepEqual(err, null);
-        assert.deepEqual(1, result.result.n);
-        assert.deepEqual(1, result.ops.length);
-
-    });
-};
-
 
 
 
