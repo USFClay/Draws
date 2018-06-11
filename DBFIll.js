@@ -25,7 +25,7 @@ MongoClient.connect(url, function (err, client) {
     var dumpCounter = 0;
 
     //dumpCycles is variable that holds the number of bulk dumps into mongo desired
-    var dumpCycles = 25;
+    var dumpCycles = 20;
 
     //gameCount sets how many games are dealt before each bulkinsert is executed
     //total records executed will be gameCount * dumpCycles
