@@ -31,6 +31,10 @@ MongoClient.connect(url, function (err, client) {
     //total records executed will be gameCount * dumpCycles
     var gameCount = 5000;
 
+    //variables to track insert stats
+    var toInsert = 0;
+    var actualInsert = 0;
+
     //loop array is function that calls itself until the number of dumps
     //into mongo db cotnrolled via x is done. Pass in callback function that recalls
     //the loop only when the batch opertion is done from the previous cycle
@@ -52,7 +56,7 @@ MongoClient.connect(url, function (err, client) {
     function bulkData(callback) {
         var bulk = col.initializeUnorderedBulkOp();
         //create the data
-        for (var i = 0; i < 5000; i++) {
+        for (var i = 0; i < gameCount; i++) {
             var deck = new Card.cardStack();
             deck.fillDeck();
             var currentGame = new Card.game();
@@ -68,11 +72,12 @@ MongoClient.connect(url, function (err, client) {
             bulk.insert(currentGame);
         }
         //count the number of uploads and complete the bulk insert
-        console.log('records to be inserted: ' + i);
+        toInsert += gameCount;
         bulk.execute(function (error, result) {
             //log actual inserts
-            console.log('number of records inserted: ' + result.nInserted);
-
+            actualInsert = 2;
+            console.log('this is happening');
+            //actualInsert+parseInt(result.nInserted)
         });
         // do callback when bulk is done
         callback();
@@ -83,6 +88,8 @@ MongoClient.connect(url, function (err, client) {
 
     client.close();//close db
     console.log("Connected successfully ended");
+    console.log('required inserts: ' + toInsert);
+    console.log('acutual inserts: ' + actualInsert);
 });
 
 //define insert function for inserting into specified collection
